@@ -9,7 +9,7 @@
 body {
     background-image: url(../othr/bg.jpg);
     background-repeat: no-repeat;
-    background-size: fill;
+    background-size: cover;
     
     display: flex;
     justify-content: center;
@@ -64,4 +64,9 @@ body {
 }
 #buttonUno {
     cursor: pointer;
+}
+
+strong {
+    font-weight: 600;
+    color: rgb(47, 81, 134);
 }
