@@ -3,6 +3,10 @@
 const buttonUno = document.getElementById('buttonUno');
 const score = document.getElementById('score');
 const bestScore = document.getElementById('bestScore');
+const bestScore2 = document.getElementById('bestScore2');
+const bestScore3 = document.getElementById('bestScore3');
+const bestScore4 = document.getElementById('bestScore4');
+const bestScore5 = document.getElementById('bestScore5');
 const timer = document.getElementById('timer');
 
 // audio
@@ -24,6 +28,17 @@ let timout = setTimeout(5000);
 // Score counter
 let scoreCounter = 0;
 
+// Best scores
+let bestscores = [];
+
+// localStorage.clear();
+
+if (localStorage.BS) {
+    bestscores = localStorage.BS.split(',');
+    console.log(`Saved scores: ${bestscores}`);
+    logBestScore(bestscores);
+}
+
 function countDown() {
     if (started) {
         clockTimer--;
@@ -33,19 +48,40 @@ function countDown() {
             endAudio.play();
         }
 
-        if (clockTimer == 0) {
+        else if (clockTimer <= 0) {
             checkingScore();
         }
     }
 }
 
-function checkingScore() {
-    let benchmark = bestScore.innerHTML.replace(/[^0-9]/g, '');
-    console.log(benchmark);
 
-    if (benchmark <= scoreCounter) {
-        bestScore.innerHTML = `Best Score: ${scoreCounter}`;
+function logBestScore(bestscores) {
+    document.getElementById('scoreboard').innerHTML = '';
+
+    const scoreTitle = document.createElement('p')
+    scoreTitle.innerHTML = `Top 5 Best Scores`;
+    document.getElementById('scoreboard').appendChild(scoreTitle);
+
+    for (let i = 0; i < 5; i++) {
+        if (bestscores[i]) {
+            const score = document.createElement('p')
+            score.innerHTML = `${[i + 1]}. ${bestscores[i]}`;
+            document.getElementById('scoreboard').appendChild(score);
+            localStorage.setItem('BS', bestscores);
+        }
     }
+
+    console.log(`local storage rn: ${localStorage.BS}`);
+}
+
+function checkingScore() {
+    // let benchmark = bestScore.innerHTML.replace(/[^0-9]/g, '');
+    // console.log(benchmark);
+
+    bestscores.push(scoreCounter);
+    bestscores.sort((a, b) => { return b - a });
+
+    logBestScore(bestscores);
 
     started = false;
     scoreCounter = -1;
@@ -56,6 +92,14 @@ function checkingScore() {
 
     wait = 3;
 }
+
+
+
+
+
+
+
+
 
 buttonUno.onclick = function () {
     if (wait == 0) {
@@ -72,17 +116,27 @@ buttonUno.onclick = function () {
     }
 }
 
-function loop () {
+
+
+
+
+
+
+
+
+
+
+function loop() {
     bgMusic.play();
-    
+
     countDown();
-    
+
     if (wait > 0) {
         wait--;
         buttonUno.innerHTML = `Wait for a moment`;
-        console.log(wait);
-    } 
-    else if (wait == 0 && scoreCounter == -1){
+        // console.log(wait);
+    }
+    else if (wait == 0 && scoreCounter == -1) {
         buttonUno.innerHTML = 'Click <strong>Here</strong> to start';
     }
 }
